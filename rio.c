@@ -121,7 +121,7 @@ derror(Display*, char *errorstr)
 void
 usage(void)
 {
-	fprint(2, "usage: grio [-x altcmd] [-a altarg] [-c bgcolor] [-w borderwidth] [-t textcolor] [-u wincolor ] [-y bordercolor1] [-z bordercolor2] [-f font] [-i initcmd] [-k kbdcmd] [-s]\n");
+	fprint(2, "usage: grio [-x altcmd] [-a altarg] [-c bgcolor] [-w borderwidth] [-t textcolor] [-u wincolor ] [-y bordercolor1] [-z bordercolor2] [-f font] [-i initcmd] [-k kbdcmd] [-s] [-e]\n");
 	exits("usage");
 }
 
@@ -141,12 +141,7 @@ threadmain(int argc, char *argv[])
 	char mountstr[512] = "/srv/riohubfs.";
 	char hubstr[512]= "riohubfs.";
 
-/*
-	if(strstr(argv[0], ".out") == nil){
-		menu3str[Exit] = nil;
-		Hidden--;
-	}
-*/
+
 
 	strcat(hubstr, getenv("user"));
 	strcat(mountstr, getenv("user"));
@@ -239,6 +234,10 @@ threadmain(int argc, char *argv[])
 		if (ucolor == nil)
 			usage();
 		winbgcolor = strtoul(ucolor,0,0);
+		break;
+	case 'e':
+		menu3str[Exit] = nil;
+		Hidden--;
 		break;
 	default:
 		usage();
