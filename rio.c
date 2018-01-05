@@ -141,8 +141,6 @@ threadmain(int argc, char *argv[])
 	char mountstr[512] = "/srv/riohubfs.";
 	char hubstr[512]= "riohubfs.";
 
-
-
 	strcat(hubstr, getenv("user"));
 	strcat(mountstr, getenv("user"));
 	if(access("/n/hubfs/io0", 0) != 0){

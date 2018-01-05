@@ -1,0 +1,139 @@
+.TH GRIO 1
+.SH NAME
+grio \- customizable rio
+.SH SYNOPSIS
+.B grio
+[
+.B -x
+.BI ' menu_cmd '
+]
+[
+.B -a
+.BI ' cmd_argument '
+]
+[
+.B -e
+]
+[
+.B -c
+.I background color
+]
+[
+.B -t
+.I text color
+]
+[
+.B -u
+.I window color
+]
+[
+.B -y
+.I active bordercolor
+]
+[
+.B -z
+.I bkground bordercolor
+]
+[
+.B -w
+.I border width
+]
+.SH DESCRIPTION
+Rio with hubfs integration, command menu customization, selectable colors.
+.I Grio
+is a modified version of 
+.IR rio (1)
+All rio options are supported. Integration with
+.IR hubfs (4)
+and a user-selectable command is provided via the right mouse button menu. This manpage describes only the new features.
+.SS Menu Options
+.I Grio
+provides an 'exit' command in the right button menu, because it is often run nested. The
+.B -e
+option removes the 'exit' command from the menu. A user-selected command (or
+.B /bin/acme
+by default) is added to the menu via the
+.B -x
+option. The command must include the full path, for instance
+.B /bin/stats
+rather than simply 'stats'. A single argument containing no spaces may be passed with the
+.B -a
+argument option. If the argument is a set of flags, the - needs to be included. For instance,
+.B -lems
+as an argument to stats. The argument may not contain any spaces, and quoting does not enable the use of multi-part arguments. 
+.SS Color Selection
+Most of the colors used by 
+.I grio
+are now user-selectable via 8 digit hex codes. See 
+.IR colors (1)
+to inspect sample colors and their codes.
+.B -c
+.I colorcode
+sets the background color.
+.B -t
+.I textcolor
+sets the color of text in windows.
+.B -u
+.I windowcolor
+sets the color the windows themselves.
+.B -y
+.I bordercolor
+sets the color of the border of the currently active window, and
+.B -z
+.I bordercolor
+sets the color of the border of the unselected windows. The width of borders is set with an integer parameter to
+.B -w
+.I borderpixels
+with 2 as the minimum for visible window borders. If no theming parameters are provided, the appearance defaults to standard.
+.SS Hubfs integration
+Another menu option,
+.B Hub
+is present in the right mouse button menu. This provides integration with
+.IR Hubfs (4)
+such that after this command is selected, the window swept out will automatically be connected to the hubfs mounted at
+.B /n/hubfs.
+On startup, if there is not already a mounted hubfs at /n/hubfs, 
+.I grio
+will launch a new instance of 
+.I hubfs
+with the srv file posted at 
+.B /srv/riohubfs.username.
+It is often useful to import the /srv of a remote machine and mount a hubfs from it to /n/hubfs prior to starting 
+.I grio
+.
+.SH EXAMPLES
+Start with no exit command in the menu, and the ability to create a subgrio with its windows set to scroll mode. (Windows of hosting grio will not be in scroll mode because the -s option is "consumed" by the -a argument.)
+.IP
+.EX
+grio -e -x /bin/grio -a -s
+.EE
+.PP
+Start with a tasteful light purple theme and thin black borders
+.IP
+.EX
+grio -c 0xffaaffff -y 0 -w 2
+.EE
+.PP
+Import and mount a hubfs already running on a remote machine for easy use from the menu
+.IP
+.EX
+rimport kremvax /srv
+mount -c /srv/kremhub /n/hubfs
+grio
+.EE
+.PP
+Start with a theme of bold and breathtaking beauty
+.IP
+.EX
+grio -c 0xff0000ff -u 0x00ccff -y 0x00ff00ff -t 0xffff00ff -z 0xffaa00ff
+.EE
+.EX
+-w 10 -x /bin/games/catclock -f /lib/font/bit/times/latin1.bold.10.font
+.EE
+.PP
+.SH SOURCE
+.B /sys/src/ants/frontmods/grio
+.SH BUGS
+It would be nice if the
+.B -a
+argument option could parse and separate multipart arguments.
