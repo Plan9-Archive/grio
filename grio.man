@@ -35,6 +35,10 @@ grio \- customizable rio
 .I bkground bordercolor
 ]
 [
+.B -B
+.I bkground image
+]
+[
 .B -w
 .I border width
 ]
@@ -85,6 +89,16 @@ sets the color of the border of the unselected windows. The width of borders is 
 .B -w
 .I borderpixels
 with 2 as the minimum for visible window borders. If no theming parameters are provided, the appearance defaults to standard.
+.SS Background Image
+.B -B
+.I backimg
+sets an image for use as the background. The image must be in Plan 9 Image format. You can use the tools such as
+.IR jpg(1)
+or
+.IR png(1)
+with the
+.B -c
+option to convert other images to Plan 9 format. The image will be tiled to fill the available background space.
 .SS Hubfs integration
 Another menu option,
 .B Hub

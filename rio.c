@@ -44,6 +44,7 @@ void	initcmd(void*);
 Channel* initkbd(void);
 
 char		*fontname;
+char		*backname;
 
 char *altcmd, *altarg;
 
@@ -121,7 +122,7 @@ derror(Display*, char *errorstr)
 void
 usage(void)
 {
-	fprint(2, "usage: grio [-x altcmd] [-a altarg] [-c bgcolor] [-w borderwidth] [-t textcolor] [-u wincolor ] [-y bordercolor1] [-z bordercolor2] [-f font] [-i initcmd] [-k kbdcmd] [-s] [-e]\n");
+	fprint(2, "usage: grio [-x altcmd] [-a altarg] [-c bgcolor] [-w borderwidth] [-t textcolor] [-u wincolor ] [-y bordercolor1] [-z bordercolor2] [-B backimg] [-f font] [-i initcmd] [-k kbdcmd] [-s] [-e]\n");
 	exits("usage");
 }
 
@@ -166,6 +167,9 @@ threadmain(int argc, char *argv[])
 		reverse = ~0xFF;
 		borderactivecolor = DPurpleblue;
 		borderbgcolor = 0x222222FF;
+		break;
+	case 'B':
+		backname = EARGF(usage());
 		break;
 	case 'f':
 		fontname = EARGF(usage());
@@ -270,7 +274,7 @@ threadmain(int argc, char *argv[])
 		fprint(2, "rio: can't open display: %r\n");
 		exits("display open");
 	}
-	iconinit();
+	iconinit(backname);
 
 	exitchan = chancreate(sizeof(int), 0);
 	winclosechan = chancreate(sizeof(Window*), 0);
@@ -288,7 +292,8 @@ threadmain(int argc, char *argv[])
 	wscreen = allocscreen(screen, background, 0);
 	if(wscreen == nil)
 		error("can't allocate screen");
-	draw(view, viewr, background, nil, ZP);
+//	draw(view, viewr, background, nil, ZP);
+	draw(view, viewr, background, nil, viewr.min);
 	flushimage(display, 1);
 
 	timerinit();
@@ -712,7 +717,8 @@ resized(void)
 	wscreen = allocscreen(screen, background, 0);
 	if(wscreen == nil)
 		error("can't re-allocate screen");
-	draw(view, view->r, background, nil, ZP);
+//	draw(view, view->r, background, nil, ZP);
+	draw(view, view->r, background, nil, view->r.min);
 	o = subpt(viewr.max, viewr.min);
 	n = subpt(view->clipr.max, view->clipr.min);
 	qsort(window, nwindow, sizeof(window[0]), wtopcmp);

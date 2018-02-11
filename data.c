@@ -185,8 +185,11 @@ Cursor *corners[9] = {
 };
 
 void
-iconinit(void)
+iconinit(char *bf)
 {
+	int fd;
+	Image *bimg = nil;
+
 	background = allocimage(display, Rect(0,0,1,1), RGB24, 1, bgtrans);
 
 	/* greys are multiples of 0x11111100+0xFF, 14* being palest */
@@ -202,6 +205,18 @@ iconinit(void)
 		cols[HIGH] = allocimage(display, Rect(0,0,1,1), CMAP8, 1, DPurpleblue);
 		titlecol = allocimage(display, Rect(0,0,1,1), CMAP8, 1, borderactivecolor);
 		lighttitlecol = allocimage(display, Rect(0,0,1,1), CMAP8, 1, borderbgcolor);
+	}
+	if(bf != nil){
+		fd = open(bf, OREAD);
+		if(fd >= 0){
+			bimg = readimage(display, fd, 0);
+			close(fd);
+		} else
+		fprint(2, "iconinit: %r\n");
+	}
+	if(bimg){
+		background = allocimage(display, Rect(0, 0, Dx(bimg->r), Dy(bimg->r)), RGB24, 1, 0xFFFFFFFF);
+		draw(background, background->r, bimg, 0, bimg->r.min);
 	}
 	dholdcol = allocimage(display, Rect(0,0,1,1), CMAP8, 1, DMedblue);
 	lightholdcol = allocimage(display, Rect(0,0,1,1), CMAP8, 1, DGreyblue);
