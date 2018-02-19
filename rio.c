@@ -122,14 +122,14 @@ derror(Display*, char *errorstr)
 void
 usage(void)
 {
-	fprint(2, "usage: grio [-x altcmd] [-a altarg] [-c bgcolor] [-w borderwidth] [-t textcolor] [-u wincolor ] [-y bordercolor1] [-z bordercolor2] [-B backimg] [-f font] [-i initcmd] [-k kbdcmd] [-s] [-e]\n");
+	fprint(2, "usage: grio [-x altcmd] [-a altarg] [-c bgcolor] [-w borderwidth] [-t textcolor] [-u wincolor ] [-y bordercolor1] [-z bordercolor2] [-l scrollbarcolor] [-B backimg] [-f font] [-i initcmd] [-k kbdcmd] [-s] [-e]\n");
 	exits("usage");
 }
 
 void
 threadmain(int argc, char *argv[])
 {
-	char *initstr, *kbdin, *s, *usercol, *borderwidth, *bacolor, *bbcolor, *tcolor, *ucolor;
+	char *initstr, *kbdin, *s, *usercol, *borderwidth, *bacolor, *bbcolor, *tcolor, *ucolor, *scrlcolor;
 	char buf[256];
 	Image *i;
 	Rectangle r;
@@ -139,6 +139,7 @@ threadmain(int argc, char *argv[])
 	borderbgcolor = DPalegreygreen;
 	textcolor = 0x000000FF;
 	winbgcolor = 0xFFFFFFFF;
+	scrollbarcolor = 0x999999FF;
 	char mountstr[512] = "/srv/riohubfs.";
 	char hubstr[512]= "riohubfs.";
 
@@ -236,6 +237,12 @@ threadmain(int argc, char *argv[])
 		if (ucolor == nil)
 			usage();
 		winbgcolor = strtoul(ucolor,0,0);
+		break;
+	case 'l':
+		scrlcolor = ARGF();
+		if (scrlcolor == nil)
+			usage();
+		scrollbarcolor = strtoul(scrlcolor,0,0);
 		break;
 	case 'e':
 		menu3str[Exit] = nil;

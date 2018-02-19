@@ -194,7 +194,7 @@ iconinit(char *bf)
 
 	/* greys are multiples of 0x11111100+0xFF, 14* being palest */
 	cols[BACK] = allocimage(display, Rect(0,0,1,1), CMAP8, 1, winbgcolor^reverse);
-	cols[BORD] = allocimage(display, Rect(0,0,1,1), CMAP8, 1, 0x999999FF^reverse);
+	cols[BORD] = allocimage(display, Rect(0,0,1,1), CMAP8, 1, scrollbarcolor^reverse);
 	cols[TEXT] = allocimage(display, Rect(0,0,1,1), CMAP8, 1, textcolor^reverse);
 	cols[HTEXT] = allocimage(display, Rect(0,0,1,1), CMAP8, 1, 0x000000FF);
 	if(!reverse) {

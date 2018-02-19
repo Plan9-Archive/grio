@@ -35,6 +35,10 @@ grio \- customizable rio
 .I bkground bordercolor
 ]
 [
+.B -l
+.I scrollbar color
+]
+[
 .B -B
 .I bkground image
 ]

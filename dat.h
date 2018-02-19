@@ -179,6 +179,7 @@ ulong	borderactivecolor;
 ulong	borderbgcolor;
 ulong	textcolor;
 ulong	winbgcolor;
+ulong	scrollbarcolor;
 void		winctl(void*);
 void		winshell(void*);
 Window*	wlookid(int);
