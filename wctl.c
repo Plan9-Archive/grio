@@ -30,6 +30,7 @@ enum
 	Hide,
 	Unhide,
 	Delete,
+	Background,
 };
 
 static char *cmds[] = {
@@ -45,6 +46,7 @@ static char *cmds[] = {
 	[Hide]	= "hide",
 	[Unhide]	= "unhide",
 	[Delete]	= "delete",
+	[Background]	= "background",
 	nil
 };
 
@@ -301,7 +303,7 @@ parsewctl(char **argp, Rectangle r, Rectangle *rp, int *pidp, int *idp, int *hid
 
 	while(isspace(*s))
 		s++;
-	if(cmd!=New && *s!='\0'){
+	if((cmd!=New && cmd!=Background) && *s!='\0'){
 		strcpy(err, "extraneous text in wctl message");
 		return -1;
 	}
@@ -440,6 +442,20 @@ wctlcmd(Window *w, Rectangle r, int cmd, char *err)
 	return -1;
 }
 
+static void
+wctlbackground(char *file)
+{
+	char *n;
+	
+	if((n = strchr(file, '\n')) != nil)
+		*n = '\0';
+
+	freeimage(background);
+	iconinit(file);
+	extern void resized(int);
+	resized(0);
+}
+
 int
 writewctl(Xfid *x, char *err)
 {
@@ -473,6 +489,13 @@ writewctl(Xfid *x, char *err)
 		if(pid > 0)
 			wsetpid(w, pid, 0);
 		return 1;
+	case Background:
+		if(*arg == '\0'){
+			strcpy(err, "invalid argument");
+			return -1;
+		}
+		wctlbackground(arg);
+		return 1;
 	}
 
 	incref(w);
@@ -502,6 +525,12 @@ wctlthread(void *v)
 		switch(cmd){
 		case New:
 			wctlnew(rect, arg, pid, hideit, scrollit, dir, err);
+			break;
+		case Background:
+			if(*arg == '\0')
+				break;
+			wctlbackground(arg);
+			break;
 		}
 		free(buf);
 	}

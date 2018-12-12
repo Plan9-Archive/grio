@@ -29,7 +29,7 @@ void		newtile(int);
 Image*	sweep(void);
 Image*	bandsize(Window*);
 Image*	drag(Window*);
-void		resized(void);
+void		resized(int new);
 Channel	*exitchan;	/* chan(int) */
 Channel	*winclosechan; /* chan(Window*); */
 Channel	*kbdchan;	/* chan(char*); */
@@ -568,7 +568,7 @@ mousethread(void*)
 	for(;;)
 	    switch(alt(alts)){
 		case MReshape:
-			resized();
+			resized(1);
 			break;
 		case MMouse:
 			if(wkeyboard!=nil && (mouse->buttons & (1<<5))){
@@ -674,16 +674,17 @@ wtopcmp(void *a, void *b)
 }
 
 void
-resized(void)
+resized(int new)
 {
 	Image *im;
 	int i, j;
 	Rectangle r;
 	Point o, n;
 	Window *w;
-
-	if(getwindow(display, Refnone) < 0)
-		error("failed to re-attach window");
+	
+	if(new)
+		if(getwindow(display, Refnone) < 0)
+			error("failed to re-attach window");
 	freescrtemps();
 	view = screen;
 	freescreen(wscreen);
